@@ -7,6 +7,7 @@ import {
   SetWhiteListSigner as SetWhiteListSignerEvent,
   Sold as SoldEvent
 } from "../generated/NFTMarketV3/NFTMarketV3"
+import { Bytes } from "@graphprotocol/graph-ts"
 import {
   Cancel,
   EIP712DomainChanged,
@@ -69,17 +70,19 @@ export function handleList(event: ListEvent): void {
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
 
-  let orderBook = new OrderBook(event.params.orderId)
-  orderBook.nft = entity.nft
-  orderBook.tokenId = entity.tokenId
-  orderBook.seller = entity.seller
-  orderBook.payToken = entity.payToken
-  orderBook.price = entity.price
-  orderBook.deadline = entity.deadline
-  orderBook.blockNumber = entity.blockNumber
-  orderBook.blockTimestamp = entity.blockTimestamp
-  orderBook.transactionHash = entity.transactionHash
-  orderBook.save()
+let orderBook = new OrderBook(event.params.orderId)
+orderBook.nft = entity.nft
+orderBook.tokenId = entity.tokenId
+orderBook.seller = entity.seller
+orderBook.payToken = entity.payToken
+orderBook.price = entity.price
+orderBook.deadline = entity.deadline
+orderBook.blockNumber = entity.blockNumber
+orderBook.blockTimestamp = entity.blockTimestamp
+orderBook.transactionHash = entity.transactionHash
+orderBook.cancelTxHash = Bytes.fromHexString("0x")
+orderBook.filledTxHash = Bytes.fromHexString("0x")
+orderBook.save()
 
   entity.save()
 }
